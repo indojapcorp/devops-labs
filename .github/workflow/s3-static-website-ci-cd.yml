@@ -1,0 +1,57 @@
+name: CI/CD for Static Website to LocalStack
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'github-actions/**'  # Only trigger the workflow if changes are pushed to the /my-static-website directory
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'github-actions/**'  # Only trigger the workflow if changes are pushed to the /my-static-website directory
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js (optional, in case you use Node.js for build)
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      # Step 3: Install dependencies (if using Node.js, for example)
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 4: Build the website (if using a build step)
+      - name: Build Website
+        run: npm run build  # Optional, if you have a build step
+
+      # Step 5: Deploy to LocalStack (S3)
+      - name: Deploy to LocalStack S3
+        env:
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          # Install AWS CLI and LocalStack CLI tools
+          sudo apt-get install -y awscli
+          pip install awscli-local
+
+          # Create an S3 bucket on LocalStack (if it doesn't exist)
+          awslocal s3 mb s3://my-static-website-bucket
+
+          # Sync the website files to LocalStack S3
+          awslocal s3 sync ./ s3://my-static-website-bucket/ --exclude ".git/*"
+          
+          # Optional: Set up the website configuration for the S3 bucket
+          awslocal s3 website s3://my-static-website-bucket/ --index-document index.html --error-document error.html
