@@ -47,8 +47,8 @@ jobs:
           LOCALSTACK_URL: "https://plain-women-swim.loca.lt"  # Use the public IP or ngrok URL
         run: |
           # Install AWS CLI and LocalStack CLI tools
-          sudo apt-get install -y awscli
-          pip install awscli-local
+          # sudo apt-get install -y awscli
+          # pip install awscli-local
 
           # Create an S3 bucket on LocalStack (if it doesn't exist)
           awslocal s3 mb s3://my-static-website-bucket
