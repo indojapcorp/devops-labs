@@ -15,5 +15,7 @@ Expose your LocalStack service (running on port 4566) to the internet:
 bash
 Copy
 lt --port 4566
+lt --port 4566 --subdomain mylocalstack
+https://mylocalstack.loca.lt
 Localtunnel will provide a URL, like https://randomsubdomain.localtunnel.me, which you can use in your GitHub Actions workflow to point to your LocalStack instance.
 
