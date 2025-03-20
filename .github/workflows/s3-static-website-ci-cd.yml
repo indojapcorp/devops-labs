@@ -44,7 +44,7 @@ jobs:
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
           AWS_DEFAULT_REGION: us-east-1
-          LOCALSTACK_URL: "http://<your-ngrok-url-or-public-ip>:4566"  # Use the public IP or ngrok URL
+          LOCALSTACK_URL: "https://plain-women-swim.loca.lt"  # Use the public IP or ngrok URL
         run: |
           # Install AWS CLI and LocalStack CLI tools
           sudo apt-get install -y awscli
