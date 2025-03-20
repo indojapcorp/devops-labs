@@ -57,7 +57,7 @@ jobs:
           aws --endpoint-url $AWS_ENDPOINT_URL s3 mb s3://my-static-website-bucket
 
           # Sync the website files to LocalStack S3
-          aws --endpoint-url $AWS_ENDPOINT_URL s3 sync ./my-static-website/ s3://my-static-website-bucket/ --exclude ".git/*"
+          aws --endpoint-url $AWS_ENDPOINT_URL s3 sync ./s3-static-website/ s3://my-static-website-bucket/ --exclude ".git/*"
           
           # Optional: Set up the website configuration for the S3 bucket
           aws --endpoint-url $AWS_ENDPOINT_URL s3 website s3://my-static-website-bucket/ --index-document index.html --error-document error.html
