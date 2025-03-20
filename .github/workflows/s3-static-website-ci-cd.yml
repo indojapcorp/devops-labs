@@ -47,14 +47,17 @@ jobs:
           LOCALSTACK_URL: "https://plain-women-swim.loca.lt"  # Use the public IP or ngrok URL
         run: |
           # Install AWS CLI and LocalStack CLI tools
-          # sudo apt-get install -y awscli
-          # pip install awscli-local
+          #sudo apt-get install -y awscli
+          #pip install awscli-local
+
+          # Set AWS endpoint to the public LocalStack address
+          export AWS_ENDPOINT_URL=$LOCALSTACK_URL
 
           # Create an S3 bucket on LocalStack (if it doesn't exist)
-          awslocal s3 mb s3://my-static-website-bucket
+          aws --endpoint-url $AWS_ENDPOINT_URL s3 mb s3://my-static-website-bucket
 
           # Sync the website files to LocalStack S3
-          awslocal s3 sync ./ s3://my-static-website-bucket/ --exclude ".git/*"
+          aws --endpoint-url $AWS_ENDPOINT_URL s3 sync ./my-static-website/ s3://my-static-website-bucket/ --exclude ".git/*"
           
           # Optional: Set up the website configuration for the S3 bucket
-          awslocal s3 website s3://my-static-website-bucket/ --index-document index.html --error-document error.html
+          aws --endpoint-url $AWS_ENDPOINT_URL s3 website s3://my-static-website-bucket/ --index-document index.html --error-document error.html
