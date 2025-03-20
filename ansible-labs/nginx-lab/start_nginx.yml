@@ -1,0 +1,10 @@
+---
+- name: Start Nginx service on managed nodes
+  hosts: all
+  become: true  # This ensures the task runs with elevated privileges (sudo)
+  tasks:
+    - name: Ensure Nginx is started
+      systemd:
+        name: nginx
+        state: started  # This ensures the nginx service is started
+        enabled: true  # Optionally, ensure Nginx starts on boot

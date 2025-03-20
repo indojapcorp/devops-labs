@@ -1,0 +1,14 @@
+---
+- name: Modify .bashrc and source it
+  hosts: all
+  tasks:
+    - name: Add custom path to .bashrc
+      lineinfile:
+        path: "~/.bashrc"
+        line: 'export PATH="/custom/path:$PATH"'
+        state: present
+
+    - name: Source the .bashrc to apply changes
+      shell: source ~/.bashrc && echo "Sourced .bashrc"
+      # The `changed_when` is used to avoid this task always being marked as changed.
+      changed_when: false

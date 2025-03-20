@@ -1,0 +1,14 @@
+---
+- name: Check Nginx service status on managed nodes
+  hosts: all
+  become: true  # This ensures the task runs with elevated privileges (sudo)
+  tasks:
+    - name: Check if Nginx is running
+      systemd:
+        name: nginx
+        state: started
+      register: nginx_status
+
+    - name: Show the status of Nginx
+      debug:
+        msg: "Nginx status: {{ nginx_status.status }}"

@@ -1,0 +1,16 @@
+#playbook manage_services.yml to ensure that nginx and mysql services are running
+---
+- name: Ensure nginx and mysql services are running
+  hosts: web_servers
+  become: yes
+
+  tasks:
+    - name: Ensure nginx is started
+      service:
+        name: nginx
+        state: started
+
+    - name: Ensure mysql is started
+      service:
+        name: mysql
+        state: started

@@ -1,0 +1,13 @@
+---
+- name: Install multiple packages
+  hosts: web_servers
+  become: true  # This ensures the task runs with elevated privileges (sudo)
+
+  tasks:
+    - name: Install nginx, git, and curl
+      apt:
+        name:
+          - nginx
+          - git
+          - curl
+        state: present

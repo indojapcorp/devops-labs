@@ -1,0 +1,10 @@
+---
+- name: Copy HTML files to web servers
+  hosts: web_servers
+  become: yes
+
+  tasks:
+    - name: Copy HTML file
+      copy:
+        src: /path/to/local/index.html
+        dest: /var/www/html/index.html

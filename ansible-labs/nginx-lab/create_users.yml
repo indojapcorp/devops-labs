@@ -1,0 +1,15 @@
+---
+- name: Create users on web servers
+  hosts: web_servers
+  become: yes
+
+  tasks:
+    - name: Create user 'alice'
+      user:
+        name: alice
+        state: present
+
+    - name: Create user 'bob'
+      user:
+        name: bob
+        state: present

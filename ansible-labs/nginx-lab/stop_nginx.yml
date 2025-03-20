@@ -1,0 +1,9 @@
+---
+- name: Stop Nginx service on managed nodes
+  hosts: all
+  become: true   # This ensures that the commands are run with sudo privileges
+  tasks:
+    - name: Stop Nginx service
+      systemd:
+        name: nginx
+        state: stopped
