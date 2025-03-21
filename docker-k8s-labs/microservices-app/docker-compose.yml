@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  user-service:
+    build:
+      context: ./user-service
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://database-service:27017/users
+    depends_on:
+      - database-service
+
+  database-service:
+    build:
+      context: ./database-service
+    ports:
+      - "27017:27017"

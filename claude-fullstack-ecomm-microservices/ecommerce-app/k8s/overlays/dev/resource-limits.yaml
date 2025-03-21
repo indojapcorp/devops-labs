@@ -1,0 +1,36 @@
+# k8s/overlays/dev/resource-limits.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: ecommerce
+spec:
+  template:
+    spec:
+      containers:
+      - name: api-gateway
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-service
+  namespace: ecommerce
+spec:
+  template:
+    spec:
+      containers:
+      - name: products-service
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+          requests:
+            memory: "64Mi"
+            cpu: "50m"

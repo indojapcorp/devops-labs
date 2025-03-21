@@ -1,0 +1,64 @@
+# k8s/base/api-gateway.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - name: api-gateway
+        image: ${IMAGE_REGISTRY}/ecommerce-api-gateway:${IMAGE_TAG}
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: AUTH_SERVICE
+          value: "http://auth-service:3001"
+        - name: PRODUCTS_SERVICE
+          value: "http://products-service:3002"
+        - name: CART_SERVICE
+          value: "http://cart-service:3003"
+        - name: ORDERS_SERVICE
+          value: "http://orders-service:3004"
+        - name: PAYMENT_SERVICE
+          value: "http://payment-service:3005"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: ecommerce
+spec:
+  selector:
+    app: api-gateway
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: ClusterIP

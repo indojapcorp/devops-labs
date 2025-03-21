@@ -1,0 +1,27 @@
+graph TD
+    Client[Client Browser]
+    API[API Gateway]
+    Auth[Auth Service]
+    Products[Products Service]
+    Cart[Cart Service]
+    Orders[Orders Service]
+    Payment[Payment Service]
+    Notifications[Notifications Service]
+    ProductsDB[(Products DB)]
+    UsersDB[(Users DB)]
+    CartDB[(Cart DB)]
+    OrdersDB[(Orders DB)]
+    
+    Client -->|HTTP/HTTPS| API
+    API --> Auth
+    API --> Products
+    API --> Cart
+    API --> Orders
+    API --> Payment
+    
+    Auth -->|Read/Write| UsersDB
+    Products -->|Read/Write| ProductsDB
+    Cart -->|Read/Write| CartDB
+    Orders -->|Read/Write| OrdersDB
+    Orders --> Notifications
+    Payment --> Orders

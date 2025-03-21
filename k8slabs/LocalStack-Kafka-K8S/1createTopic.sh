@@ -1,0 +1,1 @@
+kubectl exec -n kafka -it kafka-testclient -- kafka-topics.sh --create --topic test-topic --bootstrap-server kafka-svc.kafka.svc.cluster.local:9092 --partitions 1 --replication-factor 1

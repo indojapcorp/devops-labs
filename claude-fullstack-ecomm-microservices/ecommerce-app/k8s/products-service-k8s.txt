@@ -1,0 +1,109 @@
+# k8s/base/products-service.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-service
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-service
+  template:
+    metadata:
+      labels:
+        app: products-service
+    spec:
+      containers:
+      - name: products-service
+        image: ${IMAGE_REGISTRY}/ecommerce-products-service:${IMAGE_TAG}
+        ports:
+        - containerPort: 3002
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://products-db:27017/products"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-service
+  namespace: ecommerce
+spec:
+  selector:
+    app: products-service
+  ports:
+  - port: 3002
+    targetPort: 3002
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: products-db
+  namespace: ecommerce
+spec:
+  serviceName: products-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-db
+  template:
+    metadata:
+      labels:
+        app: products-db
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:6.0-jammy
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: data
+          mountPath: /data/db
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "300m"
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-db
+  namespace: ecommerce
+spec:
+  selector:
+    app: products-db
+  ports:
+  - port: 27017
+    targetPort: 27017
+  clusterIP: None

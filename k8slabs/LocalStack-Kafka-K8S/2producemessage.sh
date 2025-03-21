@@ -1,0 +1,1 @@
+kubectl exec -n kafka -it kafka-testclient -- kafka-console-producer.sh --topic test-topic --bootstrap-server kafka-svc.kafka.svc.cluster.local:9092

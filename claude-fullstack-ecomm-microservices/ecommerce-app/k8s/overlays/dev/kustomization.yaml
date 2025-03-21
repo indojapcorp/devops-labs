@@ -1,0 +1,21 @@
+# k8s/overlays/dev/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - ../../base
+
+nameSuffix: -dev
+
+resources:
+  - dev-config.yaml
+
+patchesStrategicMerge:
+  - resource-limits.yaml
+
+images:
+  - name: ghcr.io/username/ecommerce-api-gateway
+    newTag: latest
+  - name: ghcr.io/username/ecommerce-products
+    newTag: latest
+  # Add more images as they are created
